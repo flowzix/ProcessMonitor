@@ -1,0 +1,246 @@
+﻿<UserControl x:Class="ProcessMonitor.Views.ProcessList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ProcessMonitor.Views"
+             xmlns:prism="http://prismlibrary.com/"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             mc:Ignorable="d"  >
+    <UserControl.Resources>
+
+
+        <Style TargetType="Thumb">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Border Margin="3" Background="#626262" CornerRadius="5">
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="ScrollBar">
+            <Setter Property="Stylus.IsPressAndHoldEnabled" Value="False"/>
+            <Setter Property="Stylus.IsFlicksEnabled" Value="False"/>
+            <Setter Property="Width" Value="10"/>
+
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ScrollBar">
+                        <Grid x:Name="ScrollBackground" SnapsToDevicePixels="True">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="0.001*"/>
+                            </Grid.RowDefinitions>
+
+                            <Track x:Name="PART_Track"
+                                   IsDirectionReversed="True"
+                                   IsEnabled="{TemplateBinding IsMouseOver}"
+                                   Grid.Row="0"
+                                   >
+                                <Track.DecreaseRepeatButton>
+                                    <RepeatButton Opacity="0" Command="{x:Static ScrollBar.PageUpCommand}"></RepeatButton>
+                                </Track.DecreaseRepeatButton>
+                                <Track.IncreaseRepeatButton>
+                                    <RepeatButton Opacity="0" Command="{x:Static ScrollBar.PageDownCommand}"></RepeatButton>
+                                </Track.IncreaseRepeatButton>
+
+                                <Track.Thumb>
+                                    <Thumb>
+                                    </Thumb>
+                                </Track.Thumb>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+        </Style>
+
+        <Style TargetType="{x:Type ContextMenu}">
+            <Setter Property="SnapsToDevicePixels"
+          Value="True" />
+            <Setter Property="OverridesDefaultStyle"
+          Value="True" />
+            <Setter Property="Grid.IsSharedSizeScope"
+          Value="true" />
+            <Setter Property="HasDropShadow"
+          Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ContextMenu}">
+                        <Border x:Name="Border"
+                Background="#535353"
+                BorderThickness="1">
+                            <Border.BorderBrush>
+                                <SolidColorBrush Color="#434343" />
+                            </Border.BorderBrush>
+                            <StackPanel IsItemsHost="True"
+                      KeyboardNavigation.DirectionalNavigation="Cycle" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasDropShadow"
+                   Value="true">
+                                <Setter TargetName="Border"
+                    Property="Padding"
+                    Value="0,3,0,3" />
+                                <Setter TargetName="Border"
+                    Property="CornerRadius"
+                    Value="4" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </UserControl.Resources>
+
+    <Border Margin="5" CornerRadius="5">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="35"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Margin="5">
+
+                <Image Height="20">
+                    <Image.InputBindings>
+                        <MouseBinding MouseAction="LeftClick" Command="{Binding CreateProcessCommand}"/>
+                    </Image.InputBindings>
+                    <Image.Style>
+                        <Style TargetType="{x:Type Image}">
+                            <Setter Property="Source" Value="C:/Users/sinaC/Desktop/imgs/plus.png"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Source" Value="C:/Users/sinaC/Desktop/imgs/plushover.png"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Image.Style>
+                </Image>
+                <Border Margin="5"></Border>
+                <Image Height="20">
+                    <Image.InputBindings>
+                        <MouseBinding MouseAction="LeftClick" Command="{Binding TerminateProcessCommand}"/>
+                    </Image.InputBindings>
+                    <Image.Style>
+                        <Style TargetType="{x:Type Image}">
+                            <Setter Property="Source" Value="C:/Users/sinaC/Desktop/imgs/terminate.png"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Source" Value="C:/Users/sinaC/Desktop/imgs/terminatehover.png"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Image.Style>
+                </Image>
+                <Border Margin="5"/>
+
+                <Image Height="20">
+                    <Image.RenderTransform>
+                        <RotateTransform CenterX="10" CenterY="10"/>
+                    </Image.RenderTransform>
+                    <Image.InputBindings>
+                        <MouseBinding MouseAction="LeftClick" Command="{Binding RefreshProcessListCommand}"/>
+                    </Image.InputBindings>
+                    <Image.Style>
+                        <Style TargetType="{x:Type Image}">
+
+                            <Setter Property="Source" Value="C:/Users/sinaC/Desktop/imgs/refresh.png"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Trigger.EnterActions>
+                                        <BeginStoryboard>
+                                            <Storyboard>
+                                                <DoubleAnimation 
+                                                 Storyboard.TargetProperty="(Image.RenderTransform).(RotateTransform.Angle)"
+                                                 From="0"
+                                                 To="360"
+                                                 Duration="0:0:1"
+                                                 FillBehavior="HoldEnd"/>
+                                            </Storyboard>
+                                        </BeginStoryboard>
+                                    </Trigger.EnterActions>
+                                    <Setter Property="Source" Value="C:/Users/sinaC/Desktop/imgs/refreshhover.png"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Image.Style>
+                </Image>
+                <Border Margin="5"></Border>
+                <Border CornerRadius="5">
+                    <TextBox Width="120" VerticalContentAlignment="Center" Background="#424242" Foreground="GhostWhite"
+                         Text="{Binding FilterPhrase, UpdateSourceTrigger=PropertyChanged}">
+                        <TextBox.Resources>
+                            <Style TargetType="{x:Type Border}">
+                                <Setter Property="CornerRadius" Value="3"/>
+                            </Style>
+                        </TextBox.Resources>
+                    </TextBox>
+                </Border>
+
+                <Border Margin="5"/>
+                <ProgressBar Width="100" Background="#424242" Value="{Binding PercentOfProcessFinished}"></ProgressBar>
+            </StackPanel>
+
+
+            <StackPanel HorizontalAlignment="Right" Grid.Row="0" Grid.Column="0" Orientation="Horizontal" Margin="5">
+
+                <Image Height="20" HorizontalAlignment="Right">
+                    <Image.InputBindings>
+                        <MouseBinding MouseAction="LeftClick" Command="{Binding SortCommand}"/>
+                    </Image.InputBindings>
+                    <Image.Style>
+                        <Style TargetType="{x:Type Image}">
+                            <Setter Property="Source" Value="C:/Users/sinaC/Desktop/imgs/sort.png"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Source" Value="C:/Users/sinaC/Desktop/imgs/sorthover.png"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Image.Style>
+                </Image>
+
+            </StackPanel>
+
+
+            <ScrollViewer Background="#424242" Grid.Row="1" Grid.Column="0" BorderBrush="Gray" Grid.RowSpan="6">
+                <ListBox Background="#424242" BorderThickness="0" Grid.Row="1" Grid.Column="0"
+                         BorderBrush="Gray" ItemsSource="{Binding FilteredProcessList}" SelectedItem="{Binding SelectedProcess}">
+                    <ListBox.ContextMenu>
+                        <ContextMenu BorderBrush="Transparent">
+                            <MenuItem BorderThickness="0" BorderBrush="Transparent" Background="#545454" Foreground="GhostWhite" Header="Settings" Command="{Binding SetProcessPriorityCommand}"/>
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
+                    <ListBox.Template>
+                        <ControlTemplate>
+                            <ItemsPresenter/>
+                        </ControlTemplate>
+                    </ListBox.Template>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border CornerRadius="5">
+                                <Label Content="{Binding DisplayName}" Foreground="GhostWhite">
+                                </Label>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+
+                    <ListBox.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="10"/>
+                        </Style>
+                    </ListBox.Resources>
+                </ListBox>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+</UserControl>

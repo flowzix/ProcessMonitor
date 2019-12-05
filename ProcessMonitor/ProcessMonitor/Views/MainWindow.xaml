@@ -1,0 +1,82 @@
+﻿<Window x:Class="ProcessMonitor.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:prism="http://prismlibrary.com/"
+        xmlns:local="clr-namespace:ProcessMonitor"
+        xmlns:views="clr-namespace:ProcessMonitor.Views"
+        prism:ViewModelLocator.AutoWireViewModel="True"
+        Height="768" Width="1024"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        Background="#525252"
+        BorderBrush="#454444"
+        BorderThickness="2"
+        >
+    <Grid >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="60"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <StackPanel Margin="5" Orientation="Horizontal" HorizontalAlignment="Left" Grid.Row="0" Grid.Column="0" PreviewMouseDown="Window_PreviewMouseDown" Grid.ColumnSpan="2">
+            <Label Foreground="GhostWhite" FontFamily="Roboto" HorizontalAlignment="Left">Process Manager</Label>
+            <Label Width="1000"></Label>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="2" Grid.ColumnSpan="2" Margin="3" >
+            <Image Height="20">
+                <Image.InputBindings>
+                    <MouseBinding MouseAction="LeftClick" Command="{Binding MinimizeCommand}"/>
+                </Image.InputBindings>
+                <Image.Style>
+                    <Style TargetType="{x:Type Image}">
+                        <Setter Property="Source" Value="C:/Users/sinaC/Desktop/imgs/minimize.png"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Source" Value="C:/Users/sinaC/Desktop/imgs/minimizehover.png"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Image.Style>
+            </Image>
+            <Border Margin="5"/>
+            <Image Height="20">
+            <Image.InputBindings>
+                <MouseBinding MouseAction="LeftClick" Command="{Binding CloseCommand}"/>
+            </Image.InputBindings>
+            <Image.Style>
+                <Style TargetType="{x:Type Image}">
+                    <Setter Property="Source" Value="C:/Users/sinaC/Desktop/imgs/close.png"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Source" Value="C:/Users/sinaC/Desktop/imgs/closehover.png"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Image.Style>
+        </Image>
+            <Border Margin="5"/>
+        </StackPanel>
+
+        <views:ProcessList Grid.Row="1" Grid.Column="0" Margin="20,10,10,20" Grid.RowSpan="2">
+            
+        </views:ProcessList>
+
+        <views:ProcessDetails Grid.Row="1" Grid.Column="1" Margin="10,10,20,20" Grid.ColumnSpan="2">
+            
+        </views:ProcessDetails>
+       
+        <views:SystemPerformance Grid.Row="2" Grid.Column="1" Margin="10 10 20 20" Grid.ColumnSpan="2">
+            
+        </views:SystemPerformance>
+        
+        
+        
+    </Grid>
+</Window>
